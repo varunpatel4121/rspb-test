@@ -1,0 +1,9 @@
+openai
+python-dotenv 
+tiktoken
+speechrecognition
+pyaudio
+sounddevice
+numpy
+scipy
+faster-whisper
