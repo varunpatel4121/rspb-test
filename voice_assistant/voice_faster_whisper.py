@@ -278,5 +278,5 @@ def run_test():
     else:
         print("No audio data recorded.")
 if __name__ == "__main__":
-    run_test()
-    #run_assistant()
+    #run_test()
+    run_assistant()

@@ -1,0 +1,9 @@
+# Voice Assistant Pi Commands
+bluetoothctl
+connect EC:81:93:57:36:30D
+pw-play ~/test.wav
+
+
+
+
+python voice_faster_whisper.py
