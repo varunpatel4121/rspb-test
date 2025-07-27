@@ -16,18 +16,44 @@ from gtts import gTTS
 from pydub import AudioSegment
 from pydub.playback import play
 import subprocess, tempfile, os, textwrap
+import sounddevice as sd
+from test_voice import record_until_pause_vad
 
-# === Settings ===
-RATE = 16000
+def pick_device(name_substring, kind="input"):
+    name_substring = name_substring.lower()
+    for i, d in enumerate(sd.query_devices()):
+        if name_substring in d["name"].lower():
+            if kind == "input" and d["max_input_channels"] > 0:
+                return i
+            if kind == "output" and d["max_output_channels"] > 0:
+                return i
+    return None
+
+# === Settings (Pi) ===
+IN_DEV = pick_device("USB PnP Sound Device") or 1  # fallback to index 1
+if IN_DEV is None:
+    raise RuntimeError("USB mic not found. Run sd.query_devices() and update the substring/index.")
+
+dev_info = sd.query_devices(IN_DEV)
+RATE = 44100  # 44100 on your Pi
 CHANNELS = 1
 FRAME_DURATION_MS = 30
 FRAME_SIZE = int(RATE * FRAME_DURATION_MS / 1000)
+
+print(f"🎛️ Input device: #{IN_DEV} {dev_info['name']} @ {RATE} Hz")
+sd.default.device = (IN_DEV, None)  # set default input
+
+# === Old Settings which worked on mac ===
+# RATE = 16000
+# CHANNELS = 1
+# FRAME_DURATION_MS = 30
+# FRAME_SIZE = int(RATE * FRAME_DURATION_MS / 1000)
 MODEL_SIZE = "small"
 COMPUTE_TYPE = "int8"
 
 # This doesn't use OpenAi's model. This is just a python library.
-engine = pyttsx3.init()
-engine.setProperty("rate", 190)  # Adjust voice speed
+# engine = pyttsx3.init()
+# engine.setProperty("rate", 190)  # Adjust voice speed
 
 PIPER_EXEC = "/Users/varunpatel/Projects/piper/build/piper"
 PIPER_MODEL = "/Users/varunpatel/piper_models/en_US/amy/en_US-amy-low.onnx"
@@ -49,7 +75,11 @@ def record_until_pause(threshold=15000, max_pause_ms=800, min_record_ms=5500):
 
     try:
         with sd.InputStream(
-            samplerate=RATE, channels=CHANNELS, dtype="int16", blocksize=FRAME_SIZE
+            device=IN_DEV,                    # 👈 add this
+            samplerate=RATE,
+            channels=CHANNELS,
+            dtype="int16",
+            blocksize=FRAME_SIZE
         ) as stream:
             while True:
                 block, _ = stream.read(FRAME_SIZE)
@@ -238,5 +268,15 @@ def run_assistant():
             break
 
 
+def run_test():
+    audio_data = record_until_pause_vad()
+    if audio_data.size > 0:
+        wav_path = save_audio(audio_data)
+        text, lang = transcribe(wav_path)
+        os.remove(wav_path)
+        print(f"Transcribed text: {text} (Language: {lang})")
+    else:
+        print("No audio data recorded.")
 if __name__ == "__main__":
-    run_assistant()
+    run_test()
+    #run_assistant()

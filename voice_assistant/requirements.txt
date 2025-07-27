@@ -7,3 +7,8 @@ sounddevice
 numpy
 scipy
 faster-whisper
+playsound
+pydub
+pyttsx3
+gtts
+pygobject
