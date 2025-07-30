@@ -83,7 +83,6 @@ def record_until_pause(threshold=75000, max_pause_ms=1350, min_record_ms=5500):
         ) as stream:
             while True:
                 block, _ = stream.read(FRAME_SIZE)
-                buffer.append(block.copy())
                 volume_norm = np.linalg.norm(block) * 10
 
                 total_chunks += 1
@@ -91,8 +90,11 @@ def record_until_pause(threshold=75000, max_pause_ms=1350, min_record_ms=5500):
                 # print("volume_norm: ", volume_norm)
                 if volume_norm < threshold:
                     silent_chunks += 1
+                    # Append a silent block (array of zeros)
+                    buffer.append(np.zeros_like(block))
                 else:
                     silent_chunks = 0
+                    buffer.append(block.copy())
 
                 # print("Count of Silent Chunks: ", silent_chunks)
                 # print("total_chunks: ", total_chunks)
