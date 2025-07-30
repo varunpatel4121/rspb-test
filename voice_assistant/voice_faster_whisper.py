@@ -65,7 +65,7 @@ whisper_model = WhisperModel(MODEL_SIZE, compute_type=COMPUTE_TYPE)
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 # === Record with silence detection ===
-def record_until_pause(threshold=30000, max_pause_ms=800, min_record_ms=5500):
+def record_until_pause(threshold=45000, max_pause_ms=800, min_record_ms=5500):
     print("🎙️ Speak now... (auto stops on silence)")
     buffer = []
     silent_chunks = 0
@@ -93,6 +93,8 @@ def record_until_pause(threshold=30000, max_pause_ms=800, min_record_ms=5500):
                 else:
                     silent_chunks = 0
 
+                print("Count of Silent Chunks: ", silent_chunks)
+                print("total_chunks: ", min_record_chunks)
                 # Only allow silence to stop after min_record_chunks
                 if (
                     total_chunks > min_record_chunks
