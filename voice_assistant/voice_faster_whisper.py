@@ -65,7 +65,7 @@ whisper_model = WhisperModel(MODEL_SIZE, compute_type=COMPUTE_TYPE)
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 # === Record with silence detection ===
-def record_until_pause(threshold=15000, max_pause_ms=800, min_record_ms=5500):
+def record_until_pause(threshold=30000, max_pause_ms=800, min_record_ms=5500):
     print("🎙️ Speak now... (auto stops on silence)")
     buffer = []
     silent_chunks = 0
