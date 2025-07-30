@@ -35,7 +35,7 @@ if IN_DEV is None:
     raise RuntimeError("USB mic not found. Run sd.query_devices() and update the substring/index.")
 
 dev_info = sd.query_devices(IN_DEV)
-RATE = 44100  # 44100 on your Pi
+RATE = 16000  # 44100 on your Pi
 CHANNELS = 1
 FRAME_DURATION_MS = 30
 FRAME_SIZE = int(RATE * FRAME_DURATION_MS / 1000)
