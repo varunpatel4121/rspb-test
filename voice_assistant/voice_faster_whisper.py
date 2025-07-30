@@ -48,7 +48,7 @@ sd.default.device = (IN_DEV, None)  # set default input
 # CHANNELS = 1
 # FRAME_DURATION_MS = 30
 # FRAME_SIZE = int(RATE * FRAME_DURATION_MS / 1000)
-MODEL_SIZE = "large-v3"
+MODEL_SIZE = "tiny"
 COMPUTE_TYPE = "int8"
 
 # This doesn't use OpenAi's model. This is just a python library.
