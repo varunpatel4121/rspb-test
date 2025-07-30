@@ -156,7 +156,7 @@ Speak like a friendly human in everyday conversation—no corporate jargon.
 
 
 # === Ask ChatGPT ===
-def ask_chatgpt(user_text, user_lang, history, extra_tone=None, model="gpt-4o"):
+def ask_chatgpt(user_text, user_lang, history, extra_tone=None, model="gpt-4o-mini"):
     """
     prompt_text : the user transcript
     history     : running chat history list
@@ -263,8 +263,8 @@ def run_assistant():
                     history,
                     extra_tone=None,  # or "gentle", "excited"
                 )
-                print(f"\n🤖 ChatGPT: {reply}\n")
                 speak_audio_openai(reply)  # 🔊 TTS added here
+                print(f"\n🤖 ChatGPT: {reply}\n")
             else:
                 print("❌ No clear speech detected.")
 
