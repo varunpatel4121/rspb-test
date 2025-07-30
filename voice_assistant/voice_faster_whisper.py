@@ -48,7 +48,7 @@ sd.default.device = (IN_DEV, None)  # set default input
 # CHANNELS = 1
 # FRAME_DURATION_MS = 30
 # FRAME_SIZE = int(RATE * FRAME_DURATION_MS / 1000)
-MODEL_SIZE = "small"
+MODEL_SIZE = "tiny"
 COMPUTE_TYPE = "int8"
 
 # This doesn't use OpenAi's model. This is just a python library.
@@ -236,7 +236,7 @@ def speak_audio_openai(text: str):
             audio = AudioSegment.from_file(tmp.name, format="mp3")
             # Add 100ms of silence at the start to prevent missing the first word
             print("added full second of silence first.")
-            silence = AudioSegment.silent(duration=1000)
+            silence = AudioSegment.silent(duration=500)
             audio = silence + audio
             play(audio)  # block until finished
             os.remove(tmp.name)
