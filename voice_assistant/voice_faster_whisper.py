@@ -88,13 +88,14 @@ def record_until_pause(threshold=45000, max_pause_ms=800, min_record_ms=5500):
 
                 total_chunks += 1
 
+                print("volume_norm: ", volume_norm)
                 if volume_norm < threshold:
                     silent_chunks += 1
                 else:
                     silent_chunks = 0
 
                 print("Count of Silent Chunks: ", silent_chunks)
-                print("total_chunks: ", min_record_chunks)
+                print("total_chunks: ", total_chunks)
                 # Only allow silence to stop after min_record_chunks
                 if (
                     total_chunks > min_record_chunks
