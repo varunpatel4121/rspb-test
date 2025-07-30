@@ -235,8 +235,7 @@ def speak_audio_openai(text: str):
             tmp.flush()
             audio = AudioSegment.from_file(tmp.name, format="mp3")
             # Add 100ms of silence at the start to prevent missing the first word
-            print("added full second of silence first.")
-            silence = AudioSegment.silent(duration=500)
+            silence = AudioSegment.silent(duration=650)
             audio = silence + audio
             play(audio)  # block until finished
             os.remove(tmp.name)
