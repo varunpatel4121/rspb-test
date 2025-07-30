@@ -227,13 +227,16 @@ def speak_audio_openai(text: str):
     """
     try:
         resp = client.audio.speech.create(
-            model="gpt-4o-mini-tts", voice="shimmer", input=text, speed=1.5
+            model="gpt-4o-mini-tts", voice="shimmer", input=text, speed=1.2
         )
         # resp.content is raw MP3 bytes
         with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
             tmp.write(resp.content)
             tmp.flush()
             audio = AudioSegment.from_file(tmp.name, format="mp3")
+            # Add 100ms of silence at the start to prevent missing the first word
+            silence = AudioSegment.silent(duration=100)
+            audio = silence + audio
             play(audio)  # block until finished
             os.remove(tmp.name)
     except Exception as e:
